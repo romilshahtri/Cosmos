@@ -69,7 +69,7 @@ RUN pip install diffusers==0.32.2 \
                 huggingface-hub
 
 ## You must set HF_HOME before running this script.
-ENV HF_TOKEN=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
+ENV HF_TOKEN=$HF_TOKEN
 RUN mkdir -p /opt/ml/code/data/checkpoints && chmod -R 777 /opt/ml/code/data/checkpoints
 ENV HF_HOME=/opt/ml/code/data/checkpoints
 
