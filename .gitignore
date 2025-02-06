@@ -17,7 +17,9 @@
 outputs/
 checkpoints/*
 !checkpoints/README.md
-externals/
+externals/NeMo
+externals/batch_test
+externals/Megatron-LM
 venv/
 myenv/
 
