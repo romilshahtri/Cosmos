@@ -338,7 +338,7 @@ def main_after_setup_move(args):
         tags=tags,
         subnets=subnets[region],
         security_group_ids=security_group_ids[region],
-        train_volume_size=1500,
+        train_volume_size=1000,
     )
 
     if is_sm_queue:

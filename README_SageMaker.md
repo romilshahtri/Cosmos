@@ -1,6 +1,7 @@
 ## Running local docker
 ```
 $ cd ~/Cosmos
+$ git submodule update --init --recursive
 $ export HF_TOKEN=(huggingface token)
 $ make docker-interactive
 (docker) $ export RAW_DATA="cosmos1/models/diffusion/assets/nemo_diffusion_example_data"
@@ -20,6 +21,8 @@ $ make docker-interactive
     optim.config.lr=1e-6 \
     trainer.strategy.tensor_model_parallel_size=4
 ```
+
+* Note: Cosmos requires unreleased versions of `Megatron-LM` and `NeMo` which can be found [here](externals/README.md) and added to submodules here. SageMaker requires `batch_test` which can be found from [here](https://github.com/TRI-ML/batch_test.git).
 
 ## Run SageMaker SM Job:
 ```

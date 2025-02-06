@@ -1,0 +1,6 @@
+[submodule "externals/NeMo"]
+	path = externals/NeMo
+	url = git@github.com:romilshahtri/NeMo.git
+[submodule "externals/Megatron-LM"]
+	path = externals/Megatron-LM
+	url = git@github.com:romilshahtri/Megatron-LM.git
