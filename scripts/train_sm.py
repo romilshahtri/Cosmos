@@ -92,7 +92,18 @@ def download_from_s3(s3_path, local_dir):
 def download_models(args):
     """Function to download models from the S3 bucket to the local directory"""
     print(f"Downloading models from {args.s3_model} to {args.model_local_dir}...")
-    download_from_s3(args.s3_model, args.model_local_dir)
+    print(os.system("df -h"))
+    download_from_s3(f"{args.s3_model}/models--google-t5--t5-11b", f"{args.model_local_dir}/models--google-t5--t5-11b")
+    # download_from_s3(f"{args.s3_model}/models--nvidia--Cosmos-1.0-Guardrail", f"{args.model_local_dir}/models--nvidia--Cosmos-1.0-Guardrail")
+    print(os.system("df -h"))
+    download_from_s3(f"{args.s3_model}/models--nvidia--Cosmos-1.0-Prompt-Upsampler-12B-Text2World", f"{args.model_local_dir}/models--nvidia--Cosmos-1.0-Prompt-Upsampler-12B-Text2World")
+    print(os.system("df -h"))
+    download_from_s3(f"{args.s3_model}/models--nvidia--Cosmos-1.0-Tokenizer-CV8x8x8", f"{args.model_local_dir}/models--nvidia--Cosmos-1.0-Tokenizer-CV8x8x8")
+    print(os.system("df -h"))
+    if args.factory == "cosmos_diffusion_7b_text2world_finetune":
+        download_from_s3(f"{args.s3_model}/models--nvidia--Cosmos-1.0-Diffusion-7B-Text2World", f"{args.model_local_dir}/models--nvidia--Cosmos-1.0-Diffusion-7B-Text2World")
+    elif args.factory == "cosmos_diffusion_14b_text2world_finetune":
+        download_from_s3(f"{args.s3_model}/models--nvidia--Cosmos-1.0-Diffusion-7B-Text2World", f"{args.model_local_dir}/models--nvidia--Cosmos-1.0-Diffusion-7B-Text2World")
     # ## Run the following command to download the models
     # print("Run the following command to download the models")
     # os.system("python /opt/ml/code/cosmos1/models/diffusion/nemo/download_diffusion_nemo.py")
@@ -108,7 +119,7 @@ def download_dataset(args):
 def postprocess_dataset(args):
     ## Run the following command to preprocess the data
     print("Run the following command to preprocess the data")
-    os.system(f"python /opt/ml/code/cosmos1/models/diffusion/nemo/post_training/prepare_dataset.py --dataset_path {args.dataset_local_dir} --output_path {os.environ.get('CACHED_DATA')} --prompt 'A video of sks teal robot.' --height 480 --width 640 --num_chunks 5")
+    os.system(f"python /opt/ml/code/cosmos1/models/diffusion/nemo/post_training/prepare_dataset.py --tokenizer_dir {args.s3_model}/models--nvidia--Cosmos-1.0-Tokenizer-CV8x8x8 --dataset_path {args.dataset_local_dir} --output_path {os.environ.get('CACHED_DATA')} --prompt 'A video of sks teal robot.' --height 480 --width 640 --num_chunks 5")
 
 def main():
     # Argument parsing
@@ -124,10 +135,9 @@ def main():
     parser.add_argument("--dataset-local-dir", type=str, default="/opt/ml/code/cosmos1/models/diffusion/assets", help="Local directory to store dataset")
     args = parser.parse_args()
     parser.add_argument("--s3-model", type=str, default="s3://tri-ml-sandbox-16011-us-west-2-datasets/cosmos-1/checkpoints/Cosmos-NeMo-Assets/default", help="S3 Path to the dataset")
-    parser.add_argument("--model-local-dir", type=str, default="/opt/ml/code/data/checkpoints", help="Local directory to store dataset")
+    parser.add_argument("--model-local-dir", type=str, default="/opt/ml/input/data/training", help="Local directory to store dataset")
     
     args = parser.parse_args()
-    
     
     download_models(args) # download the models
     download_dataset(args) # download the sample videos used for post-training
