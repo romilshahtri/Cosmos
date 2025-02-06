@@ -3,7 +3,7 @@
 $ cd ~/Cosmos
 $ export HF_TOKEN=(huggingface token)
 $ make docker-interactive
-(docker) $ xport RAW_DATA="cosmos1/models/diffusion/assets/nemo_diffusion_example_data"
+(docker) $ export RAW_DATA="cosmos1/models/diffusion/assets/nemo_diffusion_example_data"
 (docker) $ export CACHED_DATA="./cached_data" && mkdir -p $CACHED_DATA
 (docker) $ python cosmos1/models/diffusion/nemo/download_diffusion_nemo.py
 (docker) $ huggingface-cli download nvidia/Cosmos-NeMo-Assets --repo-type dataset --local-dir cosmos1/models/diffusion/assets/ --include "*.mp4*"
