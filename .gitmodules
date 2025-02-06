@@ -1,6 +1,6 @@
 [submodule "externals/NeMo"]
 	path = externals/NeMo
-	url = git@github.com:romilshahtri/NeMo.git
+	url = https://github.com/TRI-ML/NeMo-Cosmos.git
 [submodule "externals/Megatron-LM"]
 	path = externals/Megatron-LM
-	url = git@github.com:romilshahtri/Megatron-LM.git
+	url = https://github.com/TRI-ML/Megatron-LM-Cosmos.git

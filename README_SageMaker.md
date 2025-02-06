@@ -1,3 +1,6 @@
+# SageMaker for Cosmos
+- Utilizing the steps mentioned in [here](https://github.com/romilshahtri/Cosmos/blob/main/cosmos1/models/diffusion/nemo/post_training/README.md#1-prepare-a-dataset) to run a SM training job.
+
 ## Running local docker
 ```
 $ cd ~/Cosmos

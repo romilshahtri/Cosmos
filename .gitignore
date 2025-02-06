@@ -17,6 +17,7 @@
 outputs/
 checkpoints/*
 !checkpoints/README.md
+externals/batch_test
 venv/
 myenv/
 

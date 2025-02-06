@@ -121,10 +121,10 @@ def main():
     parser.add_argument("--tensor-model-parallel-size", type=int, required=True, help="Tensor model parallel size")
     
     parser.add_argument("--s3-dataset", type=str, default="s3://tri-ml-sandbox-16011-us-west-2-datasets/cosmos-1/datasets/Cosmos-NeMo-Assets", help="S3 Path to the dataset")
-    parser.add_argument("--dataset-local-dir", type=str, default="/opt/ml/code/cosmos1/models/diffusion/assets/", help="Local directory to store dataset")
+    parser.add_argument("--dataset-local-dir", type=str, default="/opt/ml/code/cosmos1/models/diffusion/assets", help="Local directory to store dataset")
     args = parser.parse_args()
-    parser.add_argument("--s3-model", type=str, default="s3://tri-ml-sandbox-16011-us-west-2-datasets/cosmos-1/checkpoints/Cosmos-NeMo-Assets", help="S3 Path to the dataset")
-    parser.add_argument("--model-local-dir", type=str, default="/opt/ml/code/cosmos1/models/diffusion/assets/", help="Local directory to store dataset")
+    parser.add_argument("--s3-model", type=str, default="s3://tri-ml-sandbox-16011-us-west-2-datasets/cosmos-1/checkpoints/Cosmos-NeMo-Assets/default", help="S3 Path to the dataset")
+    parser.add_argument("--model-local-dir", type=str, default="/opt/ml/code/data/checkpoints", help="Local directory to store dataset")
     
     args = parser.parse_args()
     
