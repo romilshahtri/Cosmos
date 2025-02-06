@@ -21,7 +21,7 @@ $ make docker-interactive
     trainer.strategy.tensor_model_parallel_size=4
 ```
 
-# Run SageMaker SM Job:
+## Run SageMaker SM Job:
 ```
 $ export HF_TOKEN=(huggingface token)
 $ python3 scripts/launch_sagemaker_train.py --user romilshah --profile default --build-type update --yes --factory cosmos_diffusion_7b_text2world_finetune --data_path "/opt/ml/code/cached_data" --trainer_max_steps 100 --optim_config_lr 1e-6 --tensor_model_parallel_size 8 --region us-west-2 --arn arn:aws:iam::124224456861:role/service-role/SageMaker-SageMakerAllAccess --s3-remote-sync s3://tri-ml-sandbox-16011-us-west-2-datasets/sagemaker/s3_remote_sync/ --version 251 --instance-type p4d --instance-count 1 --base-job-name romilshah-cosmos
