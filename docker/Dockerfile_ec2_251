@@ -1,0 +1,107 @@
+ARG AWS_REGION="us-west-2"
+FROM 763104351884.dkr.ecr.${AWS_REGION}.amazonaws.com/pytorch-training:2.5.1-gpu-py311-cu124-ubuntu22.04-ec2
+ARG DEBIAN_FRONTEND=noninteractive
+
+###################################################################
+
+# Install APT packages
+RUN apt-get update
+RUN apt-get install -y      \
+        libopenexr-dev      \
+        freeglut3-dev       
+
+###################### NEMO, COSMOS, EVERYTHING ###################
+# Create workspace folder
+ENV PROJECT=Cosmos
+RUN mkdir -p /workspace/${PROJECT}
+WORKDIR /workspace/${PROJECT}
+
+# Copy project to workspace folder
+WORKDIR /workspace/${PROJECT}
+COPY . /workspace/${PROJECT}
+
+## Installing NeMo
+ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:$LD_LIBRARY_PATH"
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    ninja-build \
+    git \
+    cmake \
+    libopenblas-dev \
+    libomp-dev \
+    libfftw3-dev \
+    ffmpeg \
+    gcc g++
+
+## Pip packages
+RUN pip install ninja Cython packaging
+RUN pip install git+https://github.com/state-spaces/mamba.git@v2.2.2
+# RUN pip install "nemo_toolkit['all']>=2.2.0rc0"
+RUN pip install -e externals/NeMo
+RUN pip install -e externals/Megatron-LM
+RUN pip install megatron-energon
+RUN pip install git+https://github.com/NVIDIA/NeMo-Run.git
+RUN pip install diffusers==0.32.2 \
+                attrs==25.1.0 \
+                pytorch_lightning==2.5.0.post0 \
+                lightning==2.5.0.post0 \
+                hydra-core==1.3.2 \
+                braceexpand==0.1.7 \
+                webdataset==0.2.100 \
+                ijson==3.3.0 \
+                sacrebleu==2.5.1 \
+                rouge_score==0.1.2 \
+                jieba==0.42.1 \
+                opencc==1.1.9 \
+                pangu==4.0.6.1 \
+                datasets==3.2.0 \
+                wandb==0.19.5 \
+                sentencepiece==0.2.0 \
+                cloudpickle==3.1.1 \
+                loguru==0.7.3 \
+                av==14.1.0 \
+                sagemaker-training \
+                better-profanity \
+                git+https://github.com/NVlabs/Pytorch_Retinaface.git@b843f45 \
+                imageio[ffmpeg] \
+                iopath \
+                mediapy \
+                nltk \
+                peft \
+                pillow \
+                termcolor \
+                transformers==4.45.0 \
+                huggingface-hub
+
+## You must set HF_HOME before running this script.
+ENV HF_TOKEN=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
+RUN mkdir -p /data/checkpoints && chmod -R 777 /data/checkpoints
+ENV HF_HOME=/data/checkpoints
+
+## Path to Raw mp4 videos.
+ENV RAW_DATA="cosmos1/models/diffusion/assets/nemo_diffusion_example_data"
+
+## Path to Processed Dataset.
+ENV CACHED_DATA="./cached_data"
+RUN mkdir -p $CACHED_DATA
+
+# ## Run the following command to download the models
+# RUN python cosmos1/models/diffusion/nemo/download_diffusion_nemo.py
+
+# ## Run the following command to download the sample videos used for post-training
+# RUN huggingface-cli download nvidia/Cosmos-NeMo-Assets --repo-type dataset --local-dir cosmos1/models/diffusion/assets/ --include "*.mp4*"
+
+# ## Run the following command to preprocess the data
+# RUN python cosmos1/models/diffusion/nemo/post_training/prepare_dataset.py --dataset_path $RAW_DATA --output_path $CACHED_DATA --prompt "A video of sks teal robot." --height 480 --width 640 --num_chunks 5
+###################### NEMO, COSMOS, EVERYTHING ###################
+
+# Set other environment variables
+ENV TORCH_HOME="/data/torchhub"
+
+# Set python environment variables
+ENV PYTHONPATH=""
+ENV PYTHONPATH="/workspace/${PROJECT}:$PYTHONPATH"
+ENV PYTHONPATH="/workspace/${PROJECT}/externals:$PYTHONPATH"
+ENV PYTHONPATH="/workspace/${PROJECT}/externals/NeMo:$PYTHONPATH"
+ENV PYTHONPATH="/workspace/${PROJECT}/externals/Megatron-LM:$PYTHONPATH"
+################################

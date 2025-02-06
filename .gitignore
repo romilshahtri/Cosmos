@@ -17,6 +17,9 @@
 outputs/
 checkpoints/*
 !checkpoints/README.md
+externals/
+venv/
+myenv/
 
 # Data types
 *.jit
@@ -241,3 +244,11 @@ manifest.json
 wandb/
 onelogger.err
 onelogger.log
+
+
+# downloaded files
+cached_data/
+nemo_experiments/
+
+# videos
+*.mp4
