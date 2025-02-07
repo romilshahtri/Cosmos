@@ -49,7 +49,6 @@ def download_from_s3(s3_path, local_dir):
             if not os.path.exists(local_file_dir):
                 os.makedirs(local_file_dir)
             s3_client.download_file(s3_bucket, key, local_file_path)
-            print(f"Downloaded {key} to {local_file_path}")
     except NoCredentialsError:
         print("Credentials not available.")
     except Exception as e:
@@ -165,9 +164,6 @@ def cosmos_diffusion_14b_text2world_finetune() -> run.Partial:
 
 
 if __name__ == "__main__":
-    os.system("ls -al /opt/ml/code")
-    os.system("ls -al /opt/ml/checkpoints")
-    os.system("ls -al /opt/ml/input/data/training")
     download_models()
 
     sys.argv.extend(["--yes"])
