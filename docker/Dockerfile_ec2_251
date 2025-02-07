@@ -31,7 +31,8 @@ RUN apt-get update && apt-get install -y \
     libomp-dev \
     libfftw3-dev \
     ffmpeg \
-    gcc g++
+    gcc g++ \
+    ca-certificates
 
 ## Pip packages
 RUN pip install ninja Cython packaging

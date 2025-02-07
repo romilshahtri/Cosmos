@@ -26,7 +26,8 @@ RUN apt-get update && apt-get install -y \
     libomp-dev \
     libfftw3-dev \
     ffmpeg \
-    gcc g++
+    gcc g++ \
+    ca-certificates
 
 ## Pip packages
 RUN pip install ninja Cython packaging
@@ -70,15 +71,19 @@ RUN pip install diffusers==0.32.2 \
 
 ## You must set HF_HOME before running this script.
 ENV HF_TOKEN=$HF_TOKEN
-RUN mkdir -p /opt/ml/code/data/checkpoints && chmod -R 777 /opt/ml/code/data/checkpoints
-ENV HF_HOME=/opt/ml/code/data/checkpoints
+ENV HF_HOME="/opt/ml/checkpoints"
+RUN mkdir -p $HF_HOME && chmod -R 777 $HF_HOME
 
 ## Path to Raw mp4 videos.
 ENV RAW_DATA="/opt/ml/code/cosmos1/models/diffusion/assets/nemo_diffusion_example_data"
 
+## Path to Dataset.
+ENV DATA_HOME="/opt/ml/input/training"
+RUN mkdir -p $DATA_HOME && chmod -R 777 $DATA_HOME
+
 ## Path to Processed Dataset.
 ENV CACHED_DATA="/opt/ml/code/cached_data"
-RUN mkdir -p $CACHED_DATA
+RUN mkdir -p $CACHED_DATA && chmod -R 777 $CACHED_DATA
 
 # ## Run the following command to download the models
 # RUN python /opt/ml/code/cosmos1/models/diffusion/nemo/download_diffusion_nemo.py

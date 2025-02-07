@@ -97,12 +97,7 @@ def main():
     parser.add_argument("--local", action="store_true")
     parser.add_argument("--user", required=True, help="User name")
     
-    parser.add_argument("--yes", help="Post Training argument for yes", action="store_true")
-    parser.add_argument("--factory", help="Post Training argument for factory", default="cosmos_diffusion_7b_text2world_finetune")
-    parser.add_argument("--data_path", help="Post Training argument for data.path", default="/opt/ml/code/cached_data")
-    parser.add_argument("--trainer_max_steps", help="Post Training argument for trainer.max_steps", type=int, default=100)
-    parser.add_argument("--optim_config_lr", help="Post Training argument for optim.config.lr", type=float, default=1e-6)
-    parser.add_argument("--tensor_model_parallel_size", help="Post Training argument for trainer.strategy.tensor_model_parallel_size", type=str, default=8)
+    parser.add_argument("--cfg_path", help="Location of config file", default="configs/post-train.yaml")
 
     # AWS profile args
     parser.add_argument("--region", default="us-west-2", help="AWS region")
@@ -119,7 +114,7 @@ def main():
     parser.add_argument("--spot-instance", action="store_true")
 
     parser.add_argument('--base-job-name', type=str)
-    parser.add_argument('--input-source', choices=['s3', 'lustre', 'local'], default='lustre')
+    parser.add_argument('--input-source', choices=['s3', 'lustre', 'local'], default='s3')
 
     # Jobs Queue
     parser.add_argument("--fss-identifier", default="default", help="Share identifier for FSS queue")
@@ -221,7 +216,7 @@ def main_after_setup_move(args):
     train_use_spot_instances = args.spot_instance
     
     checkpoint_s3_uri = os.path.join(
-        f's3://tri-ml-sandbox-16011-us-west-2-datasets/cosmos-1/output-checkpoints{args.user}', job_name)
+        f's3://tri-ml-sandbox-16011-us-west-2-datasets/cosmos-1/output-checkpoints-{args.user}', job_name)
     checkpoint_s3_uri = None if args.local else checkpoint_s3_uri
 
     checkpoint_local_path = "/opt/ml/checkpoints"
@@ -242,7 +237,7 @@ def main_after_setup_move(args):
         )
     elif args.input_source == 's3':
         input_mode = 'FastFile'
-        train_fs = 's3://tri-ml-sandbox-16011-us-west-2-datasets/cosmos-1/datasets/Cosmos-NeMo-Assets/'
+        train_fs = 's3://tri-ml-sandbox-16011-us-west-2-datasets/cosmos-1/datasets-processed/HxW-480x640-chunks-50'
     else:
         raise ValueError(f'Invalid input source {args.input_source}')
     
@@ -250,11 +245,11 @@ def main_after_setup_move(args):
         'training': train_fs,
     }
     hyperparameters = {
-            "factory": f"{args.factory}",
-            "data-path": f"{args.data_path}",
-            "lr": f"{args.optim_config_lr}",
-            "max-steps": f"{args.trainer_max_steps}",
-            "tensor-model-parallel-size": f"{args.tensor_model_parallel_size}"
+        # "factory": f"{args.factory}",
+        # "data-path": f"{args.data_path}",
+        # "lr": f"{args.optim_config_lr}",
+        # "max-steps": f"{args.trainer_max_steps}",
+        # "tensor-model-parallel-size": f"{args.tensor_model_parallel_size}"
     }
     distribution={
         "torch_distributed": {
@@ -263,9 +258,10 @@ def main_after_setup_move(args):
     }
     environment = {
         "SM_USE_RESERVED_CAPACITY": "1",
-        'WANDB_API_KEY': os.environ.get('WANDB_API_KEY', None),
+        "WANDB_API_KEY": os.environ.get('WANDB_API_KEY', None),
         # "TORCH_DISTRIBUTED_DEBUG": "DETAIL",
         # "TORCH_CPP_LOG_LEVEL": "INFO",
+        "CONFIG_FILE": args.cfg_path
     }
 
     security_group_ids = {

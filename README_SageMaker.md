@@ -28,7 +28,8 @@ $ make docker-interactive
 * Note: Cosmos requires unreleased versions of `Megatron-LM` and `NeMo` which can be found [here](externals/README.md) and added to submodules here. SageMaker requires `batch_test` which can be found from [here](https://github.com/TRI-ML/batch_test.git).
 
 ## Run SageMaker SM Job:
+- Make changes to `configs/post-train.yaml` as per requirements
 ```
 $ export HF_TOKEN=(huggingface token)
-$ python3 scripts/launch_sagemaker_train.py --user romilshah --profile default --build-type update --yes --factory cosmos_diffusion_7b_text2world_finetune --data_path "/opt/ml/code/cached_data" --trainer_max_steps 100 --optim_config_lr 1e-6 --tensor_model_parallel_size 8 --region us-west-2 --arn arn:aws:iam::124224456861:role/service-role/SageMaker-SageMakerAllAccess --s3-remote-sync s3://tri-ml-sandbox-16011-us-west-2-datasets/sagemaker/s3_remote_sync/ --version 251 --instance-type p4d --instance-count 1 --base-job-name romilshah-cosmos
+$ python3 scripts/launch_sagemaker_train.py --user romilshah --profile default --build-type update --cfg_path configs/post-train.yaml --region us-west-2 --arn arn:aws:iam::124224456861:role/service-role/SageMaker-SageMakerAllAccess --s3-remote-sync s3://tri-ml-sandbox-16011-us-west-2-datasets/sagemaker/s3_remote_sync/ --version 251 --instance-type p4d --instance-count 1 --base-job-name romilshah-cosmos
 ```
