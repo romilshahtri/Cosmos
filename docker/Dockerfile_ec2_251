@@ -72,7 +72,9 @@ RUN pip install diffusers==0.32.2 \
                 pillow \
                 termcolor \
                 transformers==4.45.0 \
-                huggingface-hub
+                huggingface-hub \
+                tensorstore \
+                zarr
 
 ## You must set HF_HOME before running this script.
 ENV HF_TOKEN=$HF_TOKEN

@@ -1,9 +1,9 @@
 factory: cosmos_diffusion_7b_text2world_finetune
 max_steps: 100
 lr: 1e-6
-data_path: /opt/ml/code/cached_data
+data_path: /opt/ml/input/data/training
 tensor_model_parallel_size: 8
 s3_dataset: s3://tri-ml-sandbox-16011-us-west-2-datasets/cosmos-1/datasets-processed/HxW-480x640-chunks-50
-dataset_local_dir: /opt/ml/input/training
+dataset_local_dir: /opt/ml/input/data/training
 s3_model: s3://tri-ml-sandbox-16011-us-west-2-datasets/cosmos-1/checkpoints/Cosmos-NeMo-Assets/default
 model_local_dir: /opt/ml/checkpoints

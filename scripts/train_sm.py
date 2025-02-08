@@ -85,11 +85,11 @@ def cosmos_diffusion_7b_text2world_finetune() -> run.Partial:
     recipe.model.config = run.Config(DiT7BConfig)
 
     # Trainer setup
-    recipe.trainer.max_steps = params['max_steps']
-    recipe.optim.config.lr = params['lr']
+    recipe.trainer.max_steps = int(params['max_steps'])
+    recipe.optim.config.lr = float(params['lr'])
 
     # Tensor / Sequence parallelism
-    recipe.trainer.strategy.tensor_model_parallel_size = params['tensor_model_parallel_size']
+    recipe.trainer.strategy.tensor_model_parallel_size = int(params['tensor_model_parallel_size'])
     recipe.trainer.strategy.sequence_parallel = True
     recipe.trainer.strategy.ckpt_async_save = False
 
@@ -125,11 +125,11 @@ def cosmos_diffusion_14b_text2world_finetune() -> run.Partial:
     recipe.model.config = run.Config(DiT14BConfig)
 
     # Trainer setup
-    recipe.trainer.max_steps = params['max_steps']
-    recipe.optim.config.lr = params['lr']
+    recipe.trainer.max_steps = int(params['max_steps'])
+    recipe.optim.config.lr = float(params['lr'])
 
     # Tensor / Sequence parallelism
-    recipe.trainer.strategy.tensor_model_parallel_size = params['tensor_model_parallel_size']
+    recipe.trainer.strategy.tensor_model_parallel_size = int(params['tensor_model_parallel_size'])
     recipe.trainer.strategy.sequence_parallel = True
     recipe.trainer.strategy.ckpt_async_save = False
 

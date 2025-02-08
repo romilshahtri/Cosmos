@@ -208,7 +208,7 @@ def main_after_setup_move(args):
 
     max_run = 5 * 24 * 60 * 60
     max_wait = 5 * 24 * 60 * 60 if args.spot_instance else None
-    keep_alive_period_in_seconds = 30 * 60 if not args.spot_instance else None  
+    keep_alive_period_in_seconds = 60 * 60 if not args.spot_instance else None  
 
     entry_point = "scripts/train_sm.py"
     instance_type = "local_gpu" if args.local else INSTANCE_MAPPER[args.instance_type]
@@ -261,7 +261,11 @@ def main_after_setup_move(args):
         "WANDB_API_KEY": os.environ.get('WANDB_API_KEY', None),
         # "TORCH_DISTRIBUTED_DEBUG": "DETAIL",
         # "TORCH_CPP_LOG_LEVEL": "INFO",
-        "CONFIG_FILE": args.cfg_path
+        "CONFIG_FILE": args.cfg_path,
+        "FI_EFA_FORK_SAFE": "1",
+        "NVTE_FUSED_ATTN": "0",
+        "CUDA_DEVICE_MAX_CONNECTIONS": "1",
+        "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True"
     }
 
     security_group_ids = {
